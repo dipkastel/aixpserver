@@ -1,8 +1,39 @@
-<div class="container">
-  <header class="jumbotron">
-    <h1 class="display-3">
-      <strong>{{currentProduct.name}}</strong>, details are displayed...
-    </h1>
-    <h1 class="display-3"><strong>{{productId}}</strong></h1>
-  </header>
+<div class="custom-container">
+
+  <div class="card">
+    <div class="card-header">
+      <div class="row">
+        <div class="col col-xs-3">
+          <h3 class="panel-title">{{dataset.name}}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="card-deck card-body">
+
+      <ul ngbNav #nav="ngbNav" [(activeId)]="active" (navChange)="onNavChange($event)" class="nav-tabs">
+        <li [ngbNavItem]="1">
+          <a ngbNavLink>Dataset Preparation</a>
+          <ng-template ngbNavContent>
+            <app-dataset-preparation [dataset] = 'dataset'></app-dataset-preparation>
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="2">
+          <a ngbNavLink>Train</a>
+          <ng-template ngbNavContent>
+            <app-dataset-train></app-dataset-train>
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="3">
+          <a ngbNavLink>Deployment</a>
+          <ng-template ngbNavContent>
+            <app-dataset-deployment></app-dataset-deployment>
+          </ng-template>
+        </li>
+      </ul>
+
+      <div [ngbNavOutlet] = "nav"  class="mt-2"></div>
+
+    </div>
+  </div>
+
 </div>

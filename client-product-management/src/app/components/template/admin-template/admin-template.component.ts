@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {UserService} from '../../../services/user.service';
 import {Router} from '@angular/router';
-import {User} from "../../../model/user";
+import {User} from '../../../model/user';
 
 @Component({
   selector: 'app-admin-template',
@@ -11,7 +11,7 @@ import {User} from "../../../model/user";
 export class AdminTemplateComponent implements OnInit {
   currentUser: User;
 
-  constructor(private userService: UserService, private router: Router) {
+  constructor(private userService: UserService, public router: Router) {
     this.userService.currentUser.subscribe(data => {
       this.currentUser = data;
     });

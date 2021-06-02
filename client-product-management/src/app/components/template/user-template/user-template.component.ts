@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {UserService} from "../../../services/user.service";
-import {User} from "../../../model/user";
-import {Role} from "../../../model/role";
 import {Router} from '@angular/router';
+import {Role} from '../../../model/role';
+import {UserService} from '../../../services/user.service';
+import {User} from '../../../model/user';
 
 @Component({
   selector: 'app-user-template',
@@ -12,7 +12,7 @@ import {Router} from '@angular/router';
 export class UserTemplateComponent implements OnInit {
   currentUser: User;
 
-  constructor(private userService: UserService, private router: Router) {
+  constructor(private userService: UserService, public router: Router) {
     this.userService.currentUser.subscribe(data => {
       this.currentUser = data;
     });

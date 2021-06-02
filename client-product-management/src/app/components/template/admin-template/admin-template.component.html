@@ -24,13 +24,13 @@
     <li class="nav-item">
       <a class="navbar-brand" href="https://angular.io">
         <span><img src="assets/imgs/angular.png"></span>
-        <span class="logo">ANGULAR</span>
+        <span class="logo">Advance Inspection</span>
       </a>
     </li>
-    <li class="nav-item" [class.active]="router.url==='/dashboard'">
-      <a href="/dashboard" class="nav-link">
-        <span class="glyphicon glyphicon-home"></span>
-        <span>Dashboard</span>
+    <li class="nav-item" [class.active]="router.url==='/register'">
+      <a href="/register" class="nav-link">
+        <span class="glyphicon glyphicon-user"></span>
+        <span>register</span>
       </a>
     </li>
     <li class="nav-item" [class.active]="router.url==='/user-list'">
@@ -39,16 +39,10 @@
         <span>User List</span>
       </a>
     </li>
-    <li class="nav-item" [class.active]="router.url==='/product-list'">
-      <a href="/product-list" class="nav-link">
-        <span class="glyphicon glyphicon-th-large"></span>
-        <span>Product List</span>
-      </a>
-    </li>
-    <li class="nav-item" [class.active]="router.url==='/transaction-list'">
-      <a href="/transaction-list" class="nav-link">
-        <span class="glyphicon glyphicon-usd"></span>
-        <span>Purchases</span>
+    <li class="nav-item" [class.active]="router.url==='/profile'">
+      <a href="/profile" class="nav-link">
+        <span class="glyphicon glyphicon-user"></span>
+        <span>profile</span>
       </a>
     </li>
   </ul>

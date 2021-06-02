@@ -1,15 +1,15 @@
-import { Component} from '@angular/core';
+import {Component, NgModule} from '@angular/core';
 import {UserService} from './services/user.service';
 import {User} from './model/user';
 import {Role} from './model/role';
-import {Router, RoutesRecognized} from '@angular/router';
+import {Router, RouterModule, RoutesRecognized} from '@angular/router';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent{
+export class AppComponent {
   title = 'client-product-management';
   currentUser: User;
   isAdminPanel: boolean = false;

@@ -2,7 +2,7 @@
 
 The application structure is as follows.
 - **server-product-management** - Microservice implemented using Spring boot. [More info](server-product-management/README.md)
-- **client-product-management** - A NodeJs application implemented using Angular 7. This consumes services hosted by server side.  [More info](client-product-management/README.md)
+- **client-product-management** - A NodeJs application implemented using Angular 12. This consumes services hosted by server side.  [More info](client-product-management/README.md)
 
 ### Build
 

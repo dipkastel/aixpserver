@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import {UserService} from "../../../services/user.service";
-import {User} from "../../../model/user";
-import {Router} from "@angular/router";
+import {UserService} from '../../../services/user.service';
+import {User} from '../../../model/user';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css']
+  templateUrl: './settings.component.html',
+  styleUrls: ['./settings.component.css']
 })
-export class ProfileComponent implements OnInit {
+export class SettingsComponent implements OnInit {
 
   currentUser: User;
 
@@ -19,10 +19,5 @@ export class ProfileComponent implements OnInit {
   ngOnInit() {
   }
 
-  logOut(){
-    this.userService.logOut().subscribe(data => {
-      this.router.navigate(['/login']);
-    });
-  }
 
 }

@@ -1,12 +1,9 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
 import {User} from '../model/user';
 import {Product} from '../model/product';
-import {Transaction} from '../model/transaction';
-
-let API_URL = "http://localhost:8080/api/admin/";
+import {Abase} from './abase';
 
 @Injectable({
   providedIn: 'root'
@@ -15,68 +12,68 @@ export class AdminService {
   currentUser: User;
   headers: HttpHeaders;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private abase: Abase) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.headers = new HttpHeaders({
-      authorization:'Bearer ' + this.currentUser.token,
-      "Content-Type":"application/json; charset=UTF-8"
+      authorization: 'Bearer ' + this.currentUser.token,
+      'Content-Type': 'application/json; charset=UTF-8'
     });
   }
 
   updateUser(user: User): Observable<any> {
-    return this.http.put(API_URL + "user-update", JSON.stringify(user),
-  {headers: this.headers});
+    return this.http.put(this.abase.getBaseUrl() + '/api/admin/user-update' + '', JSON.stringify(user),
+      {headers: this.headers});
   }
 
   deleteUser(user: User): Observable<any> {
-    return this.http.post(API_URL + "user-delete", JSON.stringify(user),
-  {headers: this.headers});
+    return this.http.post(this.abase.getBaseUrl() + '/api/admin/user-delete', JSON.stringify(user),
+      {headers: this.headers});
   }
 
   findAllUsers(): Observable<any> {
-    return this.http.get(API_URL + "user-all",
-  {headers: this.headers});
+    return this.http.get(this.abase.getBaseUrl() + '/api/admin/user-all',
+      {headers: this.headers});
   }
 
   numberOfUsers(): Observable<any> {
-    return this.http.get(API_URL + "user-number",
-  {headers: this.headers});
+    return this.http.get(this.abase.getBaseUrl() + '/api/admin/user-number',
+      {headers: this.headers});
   }
 
-  //products
+  // products
   createProduct(product: Product): Observable<any> {
-    return this.http.post(API_URL + "product-create", JSON.stringify(product),
-  {headers: this.headers});
+    return this.http.post(this.abase.getBaseUrl() + '/api/admin/product-create', JSON.stringify(product),
+      {headers: this.headers});
   }
 
   updateProduct(product: Product): Observable<any> {
-    return this.http.put(API_URL + "product-update", JSON.stringify(product),
-  {headers: this.headers});
+    return this.http.put(this.abase.getBaseUrl() + '/api/admin/product-update', JSON.stringify(product),
+      {headers: this.headers});
   }
 
   deleteProduct(product: Product): Observable<any> {
-    return this.http.post(API_URL + "product-delete", JSON.stringify(product),
-  {headers: this.headers});
+    return this.http.post(this.abase.getBaseUrl() + '/api/admin/product-delete', JSON.stringify(product),
+      {headers: this.headers});
   }
 
   findAllProducts(): Observable<any> {
-    return this.http.get(API_URL + "product-all",
-  {headers: this.headers});
+    return this.http.get(this.abase.getBaseUrl() + '/api/admin/product-all',
+      {headers: this.headers});
   }
 
   numberOfProducts(): Observable<any> {
-    return this.http.get(API_URL + "product-number",
-  {headers: this.headers});
+    return this.http.get(this.abase.getBaseUrl() + '/api/admin/product-number',
+      {headers: this.headers});
   }
 
-  //transactions
+  // transactions
   findAllTransactions(): Observable<any> {
-    return this.http.get(API_URL + "transaction-all",
-   {headers: this.headers});
+    return this.http.get(this.abase.getBaseUrl() + '/api/admin/transaction-all',
+      {headers: this.headers});
   }
 
   numberOfTransactions(): Observable<any> {
-    return this.http.get(API_URL + "transaction-number",
-  {headers: this.headers});
+    return this.http.get(this.abase.getBaseUrl() + '/api/admin/transaction-number',
+      {headers: this.headers});
   }
 }

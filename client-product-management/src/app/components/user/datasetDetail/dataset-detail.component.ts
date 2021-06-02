@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {Product} from '../../../model/product';
 import {ActivatedRoute} from '@angular/router';
+import {NgbNavChangeEvent} from '@ng-bootstrap/ng-bootstrap';
+import {Dataset} from '../../../model/dataset';
 
 @Component({
   selector: 'app-datasetdetail',
@@ -9,10 +10,12 @@ import {ActivatedRoute} from '@angular/router';
 })
 export class DatasetDetailComponent implements OnInit {
   productId: string;
-  currentProduct: Product;
+  dataset: Dataset;
+  active;
+  disabled = true;
 
   constructor(private route: ActivatedRoute) {
-    this.currentProduct = JSON.parse(localStorage.getItem('currentProduct'));
+    this.dataset = JSON.parse(localStorage.getItem('currentProduct'));
   }
 
   ngOnInit() {
@@ -23,4 +26,8 @@ export class DatasetDetailComponent implements OnInit {
     });
   }
 
+
+  onNavChange($event: NgbNavChangeEvent<any>) {
+    return;
+  }
 }

@@ -1,0 +1,63 @@
+.btn{
+  margin: 3px;
+}
+.empty-box{
+  border: 1px #AFBEC5 solid;
+  border-radius: 5px;
+  background-color: #f7f9f9;
+  text-align: center;
+  padding: 200px;
+}
+.rtl{
+  direction: rtl;
+}
+
+.card-deck {
+  display: flex;
+  justify-content: flex-start;
+  flex-flow: row wrap;
+  align-items: stretch;
+}
+.card-deck .card {
+  display: block;
+  flex-basis: calc( 25% - 20px);
+  margin: 10px;
+  min-width: 270px;
+}
+.form-check-input{
+  margin: 3px;
+}
+.custom-brand{
+  width: 100%;
+  align-content: center;
+  text-align: center;
+  padding: 10px;
+}
+
+.custom-brand .glyphicon{
+  font-size: 60px;
+}
+.get-image {
+  padding: 40px;
+  text-align: center;
+  border: 1px solid #e4e4e4;
+  border-radius: 5px;
+}
+.center-cropped {
+  object-fit: cover;
+  -o-object-position: center;
+  object-position: center;
+  height: 200px;
+  width: 200px;
+  border: 1px solid #bbb;
+  border-radius: 5px;
+}
+.close {
+  border: none;
+  background: white;
+}
+.btn-close{
+  position: absolute;
+  background-color: red;
+}
+

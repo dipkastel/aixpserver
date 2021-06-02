@@ -6,7 +6,7 @@ import {User} from '../model/user';
 import {Product} from '../model/product';
 import {Transaction} from '../model/transaction';
 
-let API_URL = "http://localhost:8080/api/user/";
+const API_URL = 'http://localhost:8080/api/user/';
 
 @Injectable({
   providedIn: 'root'
@@ -26,12 +26,12 @@ export class UserService {
 
   login(user: User): Observable<any> {
     const headers = new HttpHeaders(user ? {
-      authorization:'Basic ' + btoa(user.username + ':' + user.password)
-    }:{});
+      authorization: 'Basic ' + btoa(user.username + ':' + user.password)
+    } : {});
 
-    return this.http.get<any> (API_URL + "login", {headers: headers})
+    return this.http.get<any> (API_URL + 'login', { headers : headers})
     .pipe(map(response => {
-      if(response){
+      if (response) {
         localStorage.setItem('currentUser', JSON.stringify(response));
         this.currentUserSubject.next(response);
       }
@@ -40,7 +40,7 @@ export class UserService {
   }
 
   logOut(): Observable<any> {
-    return this.http.post(API_URL + "logout", {})
+    return this.http.post(API_URL + 'logout', {})
     .pipe(map(response => {
       localStorage.removeItem('currentUser');
       this.currentUserSubject.next(null);
@@ -48,17 +48,17 @@ export class UserService {
   }
 
   register(user: User): Observable<any> {
-    return this.http.post(API_URL + "registration", JSON.stringify(user),
-  {headers: {"Content-Type":"application/json; charset=UTF-8"}});
+    return this.http.post(API_URL + 'registration', JSON.stringify(user),
+  {headers: {'Content-Type': 'application/json; charset=UTF-8'}});
   }
 
   findAllProducts(): Observable<any> {
-    return this.http.get(API_URL + "products",
-  {headers: {"Content-Type":"application/json; charset=UTF-8"}});
+    return this.http.get(API_URL + 'products',
+  {headers: {'Content-Type': 'application/json; charset=UTF-8'}});
   }
 
   purchaseProduct(transaction: Transaction): Observable<any> {
-    return this.http.post(API_URL + "purchase", JSON.stringify(transaction),
-  {headers: {"Content-Type":"application/json; charset=UTF-8"}});
+    return this.http.post(API_URL + 'purchase', JSON.stringify(transaction),
+  {headers: {'Content-Type': 'application/json; charset=UTF-8'}});
   }
 }

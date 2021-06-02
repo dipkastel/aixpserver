@@ -1,32 +1,86 @@
-<div class="container">
-  <div class="alert alert-danger" *ngIf="errorMessage">
-    <strong>Error!</strong> {{errorMessage}}
-  </div>
-  <div class="alert alert-success" *ngIf="infoMessage">
-    <strong>Successful!</strong> {{infoMessage}}
-  </div>
-  <div class="product-container">
+<div class="custom-container">
     <div class="card">
       <div class="card-header">
         <div class="row">
-          <div class="col col-xs-6">
-            <h3 class="panel-title">All Products</h3>
+          <div class="col col-xs-3">
+            <h3 class="panel-title">Datasets</h3>
+          </div>
+          <div class="col col-md-1">
+
+            <button type="button" class="btn cbtn btn-success" data-toggle="modal" (click)="openDatasetCreateModal ( ModalDatasetCreate )">
+              create
+            </button>
           </div>
         </div>
       </div>
-    </div>
-
     <div class="card-deck">
-      <div class="card" style="width: 18rem;" *ngFor="let item of obs | async">
-        <div class="custom-brand"><span class="glyphicon glyphicon-tag"></span></div>
-        <div class="card-body">
-          <h5 class="card-title">{{item.name}}</h5>
-          <p class="card-text">{{item.explanation}}</p>
-          <a class="btn btn-primary btn-custom-link" (click)="purchaseProduct(item)">Purchase</a>
-          <a class="btn btn-secondary btn-custom-link" (click)="detail(item)">Detail</a>
+      <div class="card" style="width: 18rem;" *ngFor="let item of obs | async" >
+        <a class="btn btn-close" (click)="openDatasetCreateModal ( ModalDatasetDeleteConfirm , item )" style="right: 0 ; margin-right: 10px;margin-top: 10px"></a>
+        <div class="custom-brand" (click)="detail(item)">
+          <img class="center-cropped" src="{{item.imageUrl}}" >
+        </div>
+        <div class="card-body" (click)="detail(item)">
+          <p class="card-text">{{item.name}}</p>
+          <h5 class="card-title">{{item.explanation}}</h5>
         </div>
       </div>
     </div>
     <mat-paginator [pageSizeOptions]="[5, 20, 50]" showFirstLastButtons></mat-paginator>
   </div>
+
+  <ng-template #ModalDatasetCreate let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="ModalDatasetCreate">create new dataset</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <form #createDataset = "ngForm" (ngSubmit) = "CreateDatasetSubmit(createDataset.value)">
+      <div class="modal-body">
+
+        <div class="alert alert-danger hide" role="alert"  style="white-space: pre-line" *ngIf="modalErrorMessage">
+          {{modalErrorMessage}}
+        </div>
+        <div class="form-group">
+          <label for="dataset-name" class="col-form-label">Dataset name:</label>
+          <input type="text" class="form-control" name="name" id="dataset-name" ngModel>
+        </div>
+        <div class="form-group">
+          <label for="dataset-name" class="col-form-label">Dataset image:</label>
+          <div class="get-image" appUpload (onFileDropped)='uploadFile($event)'  *ngIf="!newDatasetImage">Drop image here</div>
+          <div *ngIf="newDatasetImage">
+            <button type="button" class="btn btn-close" aria-label="Close" (click)="clearImage()"></button>
+            <img class="center-cropped" src="{{newDatasetImage}}" >
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="dataset-explanation" class="col-form-label">Dataset explanation:</label>
+          <textarea class="form-control" name="explanation" id="dataset-explanation" ngModel></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="modal.dismiss('Cross click')">Close</button>
+        <button type="submit" class="btn btn-success">create</button>
+      </div>
+    </form>
+  </ng-template>
+  <ng-template #ModalDatasetDeleteConfirm let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">confirm delete</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+      <div class="modal-body">
+        are you sure to delete {{deleteToDataset.name}}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="modal.dismiss('Cross click')">Close</button>
+        <button type="submit" class="btn btn-danger" (click)="deleteDataset(deleteToDataset)">delete</button>
+      </div>
+  </ng-template>
+
+
 </div>

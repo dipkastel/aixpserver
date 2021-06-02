@@ -1,0 +1,39 @@
+<div class="col-9 border border-secondary rounded bg-dark">
+  <div class="row">
+    <a class="btn btn-secondary btn-sm lay-button" (click)="undo()">
+      <span class="glyphicon glyphicon-arrow-left"></span>
+    </a>
+    <a class="btn btn-secondary btn-sm lay-button" (click)="erase()">
+      <span class="glyphicon glyphicon-erase"></span>
+    </a>
+  </div>
+  <canvas #ImageLayoutCanvas width="600" height="400" class="layout-canvas" (mousemove)="onMouseMove($event)"  (mousedown)="clickOnCanvas($event)" (mouseup)="DragOnCanvas($event,ModalAddLayer)" (dblclick)="clickOnCanvas($event,ModalAddLayer,true)"></canvas>
+</div>
+<div class="col-3 border border-secondary rounded bg-dark">
+  <ul >
+    <li *ngFor="let item of obs | async " class="layout-lable" (mouseover)="mouseOver(item)" (mouseleave)="mouseLeave()">{{item.lable+"-"+item.type}}</li>
+  </ul>
+</div>
+
+<!--modal add layer-->
+<ng-template #ModalAddLayer let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="ModalAddLayer">add new Layer</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <form #formAddLayer = "ngForm" (ngSubmit) = "addNewLayer(formAddLayer.value)">
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="image-name" class="col-form-label">layer name:</label>
+        <input type="text" class="form-control" name="name" id="image-name" ngModel>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="modal.dismiss()">Close</button>
+      <button type="submit" class="btn btn-success" (click)="modal.dismiss()">create</button>
+    </div>
+  </form>
+</ng-template>

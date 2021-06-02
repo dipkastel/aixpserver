@@ -1,0 +1,176 @@
+<div class="row">
+  <div class="col-6"><div class="form-check" [ngStyle]="{display: imagesList?.length ? 'block' : 'none'}">
+    <input class="form-check-input" type="checkbox" value="" id="selectMode"
+           (change)="selectMode = !selectMode">
+    <label class="form-check-label form-label" for="selectMode" >
+      select
+    </label>
+  </div>
+  </div>
+  <div class="col-6 rtl">
+    <button class="btn btn-sm btn-outline-secondary" *ngIf="selectedImages?.length>0" (click)="openModal(ModalAugment,'xl')">Data Augment</button>
+    <button class="btn btn-sm btn-outline-success col-md-2" (click)="openModal(ModalUploadImage,'lg')">+ upload</button>
+  </div>
+</div>
+<div class="row" [ngStyle]="{display: imagesList?.length ? 'block' : 'none'}">
+  <div class="form-group">
+    <label for="search" class="col-form-label">search:</label>
+    <input #search type="text" class="form-control" name="name" id="search" (input)="searchForImage($event,search)">
+  </div>
+</div>
+<div class="card-deck">
+  <div class="card" style="width: 18rem;" *ngFor="let item of obs | async ">
+    <a class="btn btn-close" (click)="openModal ( ModalImageDeleteConfirm,'xs' , item )"
+       style="right: 0 ; margin-right: 10px;margin-top: 10px"></a>
+    <input class="form-check-input" type="checkbox" value="" id="selectItem{{item.id}}" (change)="itemSelect($event,item)" *ngIf="selectMode">
+    <label class="form-check-label" for="selectItem{{item.id}}"  *ngIf="selectMode">
+      select
+    </label>
+    <div class="custom-brand" (click)="openModalLayout(ModalLayerCreator,'xl',item)">
+      <img class="center-cropped" src="{{item.imageUrl}}">
+    </div>
+    <div class="card-body" (click)="openModal(ModalLayerCreator,'xl',item)">
+      <p class="card-text">{{item.name}}</p>
+    </div>
+  </div>
+</div>
+<div *ngIf="imagesList?.length <1" class="empty-box" (click)="openModal(ModalUploadImage,'lg')">
+  <span><img src="assets/imgs/upload.png" width="100"></span><br /><br />
+  <button class="btn btn-sm btn-secondary col-md-2" >+ upload</button>
+</div>
+<mat-paginator #mainPagination [ngStyle]="{display: imagesList?.length ? 'block' : 'none'}" [pageSizeOptions]="[5, 20, 50]" showFirstLastButtons></mat-paginator>
+
+<!--modal confirm delete-->
+<ng-template #ModalImageDeleteConfirm let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" >confirm delete</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    are you sure to delete {{imageToDelete.name}}
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="modal.dismiss()">Close
+    </button>
+    <button type="submit" class="btn btn-danger" (click)="deleteImage(imageToDelete)">delete</button>
+  </div>
+</ng-template>
+
+<!--modal add image-->
+<ng-template #ModalUploadImage let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="ModalAddImage">add new image</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <form #formUploadImage = "ngForm" (ngSubmit) = "createImage(formUploadImage.value)">
+    <div class="modal-body">
+
+      <div class="alert alert-danger hide" role="alert"  style="white-space: pre-line" *ngIf="modalUploadImageErrorMessage||modalImageErrorMessage">
+        {{modalUploadImageErrorMessage}}
+        {{modalImageErrorMessage}}
+      </div>
+      <div class="form-group">
+        <label for="image-name" class="col-form-label">image name:</label>
+        <input type="text" class="form-control" name="name" id="image-name" ngModel>
+      </div>
+      <div class="form-group">
+        <label for="image" class="col-form-label">image:</label>
+        <div class="get-image" appUpload (onFileDropped)='uploadFile($event)' id="image"  *ngIf="!newImage">Drop image here</div>
+        <div *ngIf="newImage">
+          <button type="button" class="btn btn-close" aria-label="Close" (click)="clearImage()"></button>
+          <img class="center-cropped" src="{{newImage}}" >
+        </div>
+      </div>
+    </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="modal.dismiss()">Close</button>
+    <button type="submit" class="btn btn-success">create</button>
+  </div>
+  </form>
+</ng-template>
+
+<!--modal layer Creator-->
+<ng-template #ModalLayerCreator let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="ModalLayoutCreator">add / Edit image Layout</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <form #formImageLayer = "ngForm" (ngSubmit) = "addOrEditLayout(formImageLayer.value)">
+    <div class="modal-body">
+        <app-layout-editor #layoutEditorComponent  class="row" [imageData]= 'clickedImage' (LayoutDataChanged)="chagedData($event)"></app-layout-editor>
+    </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="modal.dismiss()">Close</button>
+    <button type="submit" class="btn btn-success">create</button>
+  </div>
+  </form>
+</ng-template>
+
+<!--modal augment-->
+<ng-template #ModalAugment let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="ModalAugment">Augment</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-3 border border-secondary rounded">
+          <input class="form-check-input" type="checkbox" value="" id="blurMode"
+                 (change)="BlurMode = !BlurMode">
+          <label class="form-check-label form-label" for="blurMode" >
+            blur
+          </label>
+          <br/>
+          <input class="form-check-input" type="checkbox" value="" id="HueMode"
+                 (change)="HueMode = !HueMode">
+          <label class="form-check-label form-label" for="HueMode" >
+            Hue
+          </label>
+          <br/>
+
+          <input class="form-check-input" type="checkbox" value="" id="NoiseMode"
+                 (change)="NoiseMode = !NoiseMode">
+          <label class="form-check-label form-label" for="NoiseMode" >
+            Noise
+          </label>
+          <br/>
+          <div *ngIf="BlurMode">
+            <span>Blur :</span>
+            <div class="slidecontainer">
+              <input type="range" min="0" max="100" value="0" class="slider" id="BlurRange">
+            </div>
+          </div>
+          <div *ngIf="HueMode">
+            <span>Hue :</span>
+            <div class="slidecontainer">
+              <input type="range" min="0" max="100" value="0" class="slider" id="HueRange">
+            </div>
+          </div>
+          <div *ngIf="NoiseMode">
+            <span>noise :</span>
+            <div class="slidecontainer">
+              <input type="range" min="0" max="100" value="0" class="slider" id="NoiseRange">
+            </div>
+          </div>
+        </div>
+        <div class="col-9 border border-secondary rounded">
+        </div>
+      </div>
+    </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="modal.dismiss()">Close</button>
+    <button type="submit" class="btn btn-success">create</button>
+  </div>
+</ng-template>

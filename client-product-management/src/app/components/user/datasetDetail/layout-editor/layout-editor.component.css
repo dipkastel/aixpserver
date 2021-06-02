@@ -1,0 +1,22 @@
+.lay-button{
+  width: 30px;
+  margin: 2px;
+}
+.layout-canvas{
+  cursor: crosshair;
+}
+.layout-lable{
+  color: #fff;
+  padding: 10px;
+  list-style: none;
+  background: #666;
+  margin: 3px;
+  border: 1px solid #999;
+  border-radius: 5px;
+}
+.layout-lable:hover{
+  background: #699;
+}
+ul{
+  padding: 0px;
+}
