@@ -1,8 +1,11 @@
 package com.sha.serverproductmanagement.jwt;
 
+import com.sha.serverproductmanagement.model.User;
+import com.sha.serverproductmanagement.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,6 +33,9 @@ public class JwtTokenProvider {
 
     @Value("${app.jwt.expiration-in-ms}")
     private Long jwtExpirationInMs;
+
+    @Autowired
+    private UserService userService;
 
     public String generateToken(Authentication auth){
         String authorities = auth.getAuthorities().stream()
@@ -78,5 +84,8 @@ public class JwtTokenProvider {
     }
 
 
-
+    public User getCurrentUser(String token) {
+        Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
+        return userService.findByUsername(claims.getSubject());
+    }
 }

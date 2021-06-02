@@ -1,0 +1,28 @@
+  <div class="main-login">
+    <img id="profile-img" class="login-image" src="../../../assets/imgs/loginimage.jpg"/>
+
+    <div class="login-form-container">
+
+      <div class="aiex">AIEX</div>
+      <form name="form-signin" class="container login-form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
+        <div class="login-signin-title">signin</div>
+        <div class="alert alert-danger" role="alert" *ngIf="errorMessage">{{errorMessage}}</div>
+        <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
+          <label for="username">email</label>
+          <input type="text" class="form-control input-text-custom" id="username" name="username"
+                 [(ngModel)]="user.username" #username="ngModel" required/>
+          <div *ngIf="f.submitted && !username.valid" class="help-block">An valid username is required.</div>
+        </div>
+        <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
+          <label for="password">Password</label>
+          <input type="password" class="form-control input-text-custom" id="password" name="password"
+                 [(ngModel)]="user.password" #password="ngModel" required/>
+          <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required.</div>
+        </div>
+        <div class="form-group" >
+          <button class="btn btn-xs btn-success" type="submit">login</button>
+        </div>
+      </form><!-- /form -->
+      <!--    <a [routerLink]="['/register']" class="btn btn-link">Create New Account!</a>-->
+    </div>
+  </div>
