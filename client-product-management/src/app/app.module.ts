@@ -36,6 +36,7 @@ import {TrainComponent} from './components/user/datasetDetail/train/train.compon
 import {PreparationComponent} from './components/user/datasetDetail/preparation/preparation.component';
 import {DeploymentComponent} from './components/user/datasetDetail/deployment/deployment.component';
 import {LayoutEditorComponent} from './components/user/datasetDetail/layout-editor/layout-editor.component';
+import {MatSelectModule} from '@angular/material/select';
 
 
 @NgModule({
@@ -60,26 +61,27 @@ import {LayoutEditorComponent} from './components/user/datasetDetail/layout-edit
     PreparationComponent,
     LayoutEditorComponent
   ],
-  imports: [
-    RouterModule.forRoot(AppRoutingModule.getRouts()),
-    FormsModule,
-    CommonModule,
-    BrowserModule,
-    MatButtonModule,
-    MatCardModule,
-    MatInputModule,
-    MatListModule,
-    MatToolbarModule,
-    MatFormFieldModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatProgressBarModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgbNavModule
-  ],
+    imports: [
+        RouterModule.forRoot(AppRoutingModule.getRouts()),
+        FormsModule,
+        CommonModule,
+        BrowserModule,
+        MatButtonModule,
+        MatCardModule,
+        MatInputModule,
+        MatListModule,
+        MatToolbarModule,
+        MatFormFieldModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatProgressBarModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
+        FormsModule,
+        ReactiveFormsModule,
+        NgbNavModule,
+        MatSelectModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

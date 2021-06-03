@@ -16,8 +16,8 @@ public class DataCategory {
     @Column(name="name")
     private String name;
 
-    @Column(name="supercategory")
-    private String supercategory;
+    @Column(name="supercategoryId")
+    private Long supercategoryId;
 
 
 

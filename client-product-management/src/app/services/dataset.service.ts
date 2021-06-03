@@ -5,6 +5,7 @@ import {User} from '../model/user';
 import {Dataset} from '../model/dataset';
 import {Abase} from './abase';
 import {DataImage} from '../model/dataImage';
+import {Category} from '../model/Category';
 
 const API_URL = 'http://localhost:8080/api/dataset/';
 
@@ -51,4 +52,12 @@ export class DatasetService {
   }
 
 
+  getAllCategories(): Observable<any> {
+    return this.http.get(this.abase.getBaseUrl() + '/api/dataset/getallcategories/',
+      {headers: this.headers});
+  }
+
+  addCategory(newCategory: Category):Observable<any> {
+    return  this.http.post(this.abase.getBaseUrl()+'/api/dataset/addcategorie/',newCategory,{headers: this.headers});
+  }
 }

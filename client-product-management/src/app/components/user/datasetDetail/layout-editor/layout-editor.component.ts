@@ -5,6 +5,9 @@ import {Observable} from 'rxjs';
 import {MatTableDataSource} from '@angular/material/table';
 import {ClickPoint} from '../../../../model/ClickPoint';
 import {PolyData} from '../../../../model/polydata';
+import {Category} from '../../../../model/Category';
+import {DatasetService} from '../../../../services/dataset.service';
+import {FormControl} from '@angular/forms';
 @Component({
   selector: 'app-layout-editor',
   templateUrl: './layout-editor.component.html',
@@ -22,15 +25,24 @@ export class LayoutEditorComponent implements OnInit {
   ratio:number;
   obs: Observable<any>;
   private objtype: string;
+  addCategoryMode = false;
   drag:ClickPoint;
+  categoriesObs:Observable<any>;
+  categoriesSource:Category[];
+  categories:  MatTableDataSource<Category> = new MatTableDataSource();
+  selectControl=new FormControl();
+  SelectedSuperCatToAdd: any;
+  SelectedCat: any;
 
-  constructor(public modalService: NgbModal) { }
+  constructor(public modalService: NgbModal,private datasetService: DatasetService ) { }
 
   ngOnInit(): void {
     this.obs = this.objs.connect();
+    this.categoriesObs = this.categories.connect();
     this.img = new Image()
     this.img.src = this.imageData.imageUrl;
     this.Sourceimg = this.img;
+    this.getAllcategories();
   }
   // tslint:disable-next-line:use-life-cycle-interface
   ngAfterViewInit() {
@@ -67,6 +79,7 @@ export class LayoutEditorComponent implements OnInit {
         this.ctx.lineTo(this.obj[i].x,this.obj[i].y);
         if(!end) this.point(this.obj[i].x,this.obj[i].y);
       }
+      this.ctx.stroke();
     }
       this.objs.data.forEach(item=>{
 
@@ -87,7 +100,7 @@ export class LayoutEditorComponent implements OnInit {
     this.ctx.stroke();
     if(end){
       this.objtype = 'polygon';
-      this.modalService.open(modal, {ariaLabelledBy: 'modal-basic-title'});
+      this.openModalAddlayer(modal);
     }
   }
   point(x, y){
@@ -124,13 +137,15 @@ export class LayoutEditorComponent implements OnInit {
       this.obj.push(new ClickPoint($event.offsetX,$event.offsetY));
       this.obj.push(new ClickPoint($event.offsetX,this.obj[0].y));
       this.objtype = 'box';
-      this.modalService.open(modal, {ariaLabelledBy: 'modal-basic-title'});
+      this.openModalAddlayer(modal);
     }
   }
   addNewLayer(value) {
-    this.objs.data.push(new PolyData(this.obj,value.name,this.objtype));
+    const selectedCategory = this.categoriesSource.filter(p=>p.id===this.SelectedCat)[0];
+    this.objs.data.push(new PolyData(this.obj,selectedCategory,this.objtype));
     this.obj = new Array();
     this.draw();
+    this.drag = new ClickPoint(0,0);
     this.LayoutDataChanged.emit(this.objs.data);
   }
 
@@ -154,8 +169,9 @@ export class LayoutEditorComponent implements OnInit {
   onMouseMove($event) {
     if($event.buttons)
     {
-      if(this.drag.x===0&&this.drag.y===0)
+      if(this.drag.x===0&&this.drag.y===0){
         this.drag = new ClickPoint($event.offsetX,$event.offsetY);
+      }
       this.draw();
       this.ctx.beginPath();
       this.ctx.moveTo(this.drag.x,this.drag.y);
@@ -165,12 +181,73 @@ export class LayoutEditorComponent implements OnInit {
       this.ctx.lineTo(this.drag.x,this.drag.y);
       this.ctx.stroke()
     }else{
+      this.draw();
+      this.ctx.beginPath();
       this.drag = new ClickPoint(0,0);
       if(this.obj.length>0){
-        this.draw();
+        this.ctx.moveTo(this.obj[this.obj.length-1].x,this.obj[this.obj.length-1].y);
         this.ctx.lineTo($event.offsetX,$event.offsetY);
         this.ctx.stroke()
       }
     }
+  }
+
+
+
+  private getAllcategories() {
+    this.datasetService.getAllCategories().subscribe(
+      data=>{
+        this.categoriesSource =data;
+        // tslint:disable-next-line:prefer-const
+        let finalList = [];
+        // tslint:disable-next-line:only-arrow-functions
+        data.forEach(function(item) {
+          if(!item.supercategoryId){
+            // tslint:disable-next-line:prefer-const
+            let listitem = {
+              parent:item,
+              childs:data.filter(o=>o.supercategoryId===item.id)
+            }
+            finalList.push(listitem);
+          }
+        });
+        this.categories.data = finalList;
+        },
+      error => {
+        console.log(error);
+      }
+    )
+  }
+
+
+  addCategory(addCategoryForm) {
+    let newCategory = new Category();
+    newCategory.name = addCategoryForm.categoryNameToAdd.value;
+    newCategory.supercategoryId = this.SelectedSuperCatToAdd;
+    this.datasetService.addCategory(newCategory).subscribe(
+      data=>{
+        this.addCategoryMode = false;
+        this.SelectedSuperCatToAdd=null;
+        this.getAllcategories();
+        this.SelectedCat = data.id;
+      });
+    return;
+  }
+
+  private openModalAddlayer(modal) {
+
+    this.modalService.open(modal, {ariaLabelledBy: 'modal-basic-title'}).result.then(
+      result => {
+        if(result!=='success'){
+          this.drag = new ClickPoint(0,0);
+          this.obj = new Array();
+        }
+      },
+      reason => {
+        if(reason!=='success'){
+          this.drag = new ClickPoint(0,0);
+          this.obj = new Array();
+        }
+      });
   }
 }
