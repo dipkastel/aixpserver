@@ -1,7 +1,9 @@
 package com.sha.serverproductmanagement.service;
 
+import com.sha.serverproductmanagement.model.DataAnnotation;
 import com.sha.serverproductmanagement.model.DataImage;
 import com.sha.serverproductmanagement.model.Dataset;
+import com.sha.serverproductmanagement.repository.DatasetAnnotationRepository;
 import com.sha.serverproductmanagement.repository.DatasetImageRepository;
 import com.sha.serverproductmanagement.repository.DatasetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,8 @@ public class DatasetServiceImpl implements DatasetService {
     private DatasetRepository datasetRepository;
     @Autowired
     private DatasetImageRepository datasetImageRepository;
+    @Autowired
+    private DatasetAnnotationRepository datasetAnnotationRepository;
 
     @Override
     public Dataset saveDataset(Dataset dataset) {
@@ -54,5 +58,21 @@ public class DatasetServiceImpl implements DatasetService {
     @Override
     public List<DataImage> findAllDatasetImages(Long datasetId) {
         return datasetImageRepository.findDatasetImages(datasetId);
+    }
+
+    @Override
+    public DataAnnotation findImageAnnotation(Long imageId) {
+        return datasetAnnotationRepository.findImageAnnotation(imageId);
+    }
+
+    @Override
+    public DataAnnotation saveAnnotation(DataAnnotation annotation) {
+        return datasetAnnotationRepository.save(annotation);
+    }
+
+    @Override
+    public void deleteAnnotations(Long image_id) {
+        DataAnnotation dataAnnotation = findImageAnnotation(image_id);
+        datasetAnnotationRepository.delete(dataAnnotation);
     }
 }

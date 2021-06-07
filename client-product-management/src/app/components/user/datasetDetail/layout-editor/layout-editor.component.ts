@@ -33,6 +33,7 @@ export class LayoutEditorComponent implements OnInit {
   selectControl=new FormControl();
   SelectedSuperCatToAdd: any;
   SelectedCat: any;
+  annotationId:number;
 
   constructor(public modalService: NgbModal,private datasetService: DatasetService ) { }
 
@@ -43,6 +44,7 @@ export class LayoutEditorComponent implements OnInit {
     this.img.src = this.imageData.imageUrl;
     this.Sourceimg = this.img;
     this.getAllcategories();
+    this.getAnnotations();
   }
   // tslint:disable-next-line:use-life-cycle-interface
   ngAfterViewInit() {
@@ -142,7 +144,7 @@ export class LayoutEditorComponent implements OnInit {
   }
   addNewLayer(value) {
     const selectedCategory = this.categoriesSource.filter(p=>p.id===this.SelectedCat)[0];
-    this.objs.data.push(new PolyData(this.obj,selectedCategory,this.objtype));
+    this.objs.data.push(new PolyData(this.obj,selectedCategory,this.objtype,this.imageData.id,this.annotationId));
     this.obj = new Array();
     this.draw();
     this.drag = new ClickPoint(0,0);
@@ -249,5 +251,18 @@ export class LayoutEditorComponent implements OnInit {
           this.obj = new Array();
         }
       });
+  }
+
+  private getAnnotations() {
+    this.datasetService.GetImageAnnotation(this.imageData.id).subscribe(data=>{
+      var polyitem = JSON.parse(data.segmentation);
+      this.annotationId = data.id;
+      this.objs.data = polyitem;
+      this.draw()
+      console.log('polyitem');
+      console.log(polyitem);
+    },error => {
+      console.log(error);
+    })
   }
 }

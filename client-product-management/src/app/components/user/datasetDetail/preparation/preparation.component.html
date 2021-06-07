@@ -35,7 +35,7 @@
   </div>
 </div>
 <div *ngIf="imagesList?.length <1" class="empty-box" (click)="openModal(ModalUploadImage,'lg')">
-  <span><img src="assets/imgs/upload.png" width="100"></span><br /><br />
+  <span><img src="client/assets/imgs/upload.png" width="100"></span><br /><br />
   <button class="btn btn-sm btn-secondary col-md-2" >+ upload</button>
 </div>
 <mat-paginator #mainPagination [ngStyle]="{display: imagesList?.length ? 'block' : 'none'}" [pageSizeOptions]="[5, 20, 50]" showFirstLastButtons></mat-paginator>

@@ -5,8 +5,8 @@ import {map} from 'rxjs/operators';
 import {User} from '../model/user';
 import {Product} from '../model/product';
 import {Transaction} from '../model/transaction';
+import {Abase} from './abase';
 
-const API_URL = 'http://localhost:8080/api/user/';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ export class UserService {
   public currentUser: Observable<User>;
   private currentUserSubject: BehaviorSubject<User>;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private abase: Abase) {
     this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
     this.currentUser = this.currentUserSubject.asObservable();
   }
@@ -29,7 +29,7 @@ export class UserService {
       authorization: 'Basic ' + btoa(user.username + ':' + user.password)
     } : {});
 
-    return this.http.get<any> (API_URL + 'login', { headers : headers})
+    return this.http.get<any> (this.abase.getBaseUrl() + '/api/user/login', { headers : headers})
     .pipe(map(response => {
       if (response) {
         localStorage.setItem('currentUser', JSON.stringify(response));
@@ -40,7 +40,7 @@ export class UserService {
   }
 
   logOut(): Observable<any> {
-    return this.http.post(API_URL + 'logout', {})
+    return this.http.post(this.abase.getBaseUrl() + '/api/user/logout', {})
     .pipe(map(response => {
       localStorage.removeItem('currentUser');
       this.currentUserSubject.next(null);
@@ -48,17 +48,7 @@ export class UserService {
   }
 
   register(user: User): Observable<any> {
-    return this.http.post(API_URL + 'registration', JSON.stringify(user),
-  {headers: {'Content-Type': 'application/json; charset=UTF-8'}});
-  }
-
-  findAllProducts(): Observable<any> {
-    return this.http.get(API_URL + 'products',
-  {headers: {'Content-Type': 'application/json; charset=UTF-8'}});
-  }
-
-  purchaseProduct(transaction: Transaction): Observable<any> {
-    return this.http.post(API_URL + 'purchase', JSON.stringify(transaction),
+    return this.http.post(this.abase.getBaseUrl()  + '/api/user/registration', JSON.stringify(user),
   {headers: {'Content-Type': 'application/json; charset=UTF-8'}});
   }
 }

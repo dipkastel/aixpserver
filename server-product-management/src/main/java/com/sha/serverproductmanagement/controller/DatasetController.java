@@ -1,10 +1,7 @@
 package com.sha.serverproductmanagement.controller;
 
 import com.sha.serverproductmanagement.jwt.JwtTokenProvider;
-import com.sha.serverproductmanagement.model.DataCategory;
-import com.sha.serverproductmanagement.model.DataImage;
-import com.sha.serverproductmanagement.model.Dataset;
-import com.sha.serverproductmanagement.model.User;
+import com.sha.serverproductmanagement.model.*;
 import com.sha.serverproductmanagement.service.CategoryService;
 import com.sha.serverproductmanagement.service.DatasetService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,6 +77,16 @@ public class DatasetController {
         categoryService.deleteCategory(categoryId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+    @GetMapping("/api/dataset/getImageAnnotation/{imageid}")
+    public ResponseEntity<?> getImageAnnotation(@PathVariable Long imageid){
+        return new ResponseEntity<>(datasetService.findImageAnnotation(imageid), HttpStatus.OK);
+    }
 
-
+    @PostMapping("/api/dataset/addAnnotation/")
+    public ResponseEntity<?> addAnnotation(@RequestBody DataAnnotation annotation){
+        try {
+            datasetService.deleteAnnotations(annotation.getImage_id());
+        }catch (Exception e){}
+        return new ResponseEntity<>(datasetService.saveAnnotation(annotation), HttpStatus.OK);
+    }
 }

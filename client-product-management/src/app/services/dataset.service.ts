@@ -6,8 +6,8 @@ import {Dataset} from '../model/dataset';
 import {Abase} from './abase';
 import {DataImage} from '../model/dataImage';
 import {Category} from '../model/Category';
+import {DataAnnotation} from '../model/dataAnnotation';
 
-const API_URL = 'http://localhost:8080/api/dataset/';
 
 @Injectable({
   providedIn: 'root'
@@ -60,4 +60,14 @@ export class DatasetService {
   addCategory(newCategory: Category):Observable<any> {
     return  this.http.post(this.abase.getBaseUrl()+'/api/dataset/addcategorie/',newCategory,{headers: this.headers});
   }
+
+  addAnnotation(dataAnnotation: DataAnnotation) {
+    return  this.http.post(this.abase.getBaseUrl()+'/api/dataset/addAnnotation/',dataAnnotation,{headers: this.headers});
+  }
+
+  GetImageAnnotation(imageId : number): Observable<any> {
+    return this.http.get(this.abase.getBaseUrl() + '/api/dataset/getImageAnnotation/'+imageId,
+      {headers: this.headers});
+  }
+
 }

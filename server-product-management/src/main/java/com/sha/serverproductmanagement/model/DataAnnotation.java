@@ -19,11 +19,11 @@ public class DataAnnotation {
     @Column(name="is_crowd")
     private String is_crowd;
 
-    @Column(name="segmentation")
+    @Column(name="segmentation",columnDefinition="TEXT")
     private String segmentation;
 
     @Column(name="image_id")
-    private String image_id;
+    private Long image_id;
 
     @Column(name="area")
     private double area;

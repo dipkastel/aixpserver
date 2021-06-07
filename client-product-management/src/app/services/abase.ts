@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 
-const baseApiUrl = 'http://localhost:8080';
+const baseApiUrl = 'http://130.185.120.230:8080/server_war';
 
 @Injectable({
   providedIn: 'root'

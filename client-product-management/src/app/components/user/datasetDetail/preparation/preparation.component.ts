@@ -9,6 +9,7 @@ import {Dataset} from '../../../../model/dataset';
 import {MatPaginator} from '@angular/material/paginator';
 import {LayoutEditorComponent} from '../layout-editor/layout-editor.component';
 import {PolyData} from '../../../../model/polydata';
+import {DataAnnotation} from '../../../../model/dataAnnotation';
 
 @Component({
   selector: 'app-dataset-preparation',
@@ -159,7 +160,13 @@ export class PreparationComponent implements OnInit {
   }
 
   addOrEditLayout(value: any) {
-    console.log(this.dataTosave);
+    let annotations = JSON.stringify(this.dataTosave);
+    let dataAnnotation = new DataAnnotation( this.dataTosave[0].annotationId,this.dataTosave[0].imageId,annotations);
+    this.datasetService.addAnnotation(dataAnnotation).subscribe(data=>{
+      this.modalService.dismissAll();
+    },error=>{
+      alert(error.message);
+    });
   }
 
   chagedData($event: Array<PolyData>) {

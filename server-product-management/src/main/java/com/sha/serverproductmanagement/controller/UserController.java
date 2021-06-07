@@ -23,6 +23,10 @@ public class UserController {
 
 
 
+    @GetMapping("/")
+    public ResponseEntity<?> test(){
+            return new ResponseEntity<>("success",HttpStatus.OK);
+	 }
     @PostMapping("/api/user/registration")
     public ResponseEntity<?> register(@RequestBody User user){
         if(userService.findByUsername(user.getUsername())!=null){

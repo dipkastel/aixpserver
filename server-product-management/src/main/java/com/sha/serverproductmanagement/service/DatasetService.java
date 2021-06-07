@@ -1,5 +1,6 @@
 package com.sha.serverproductmanagement.service;
 
+import com.sha.serverproductmanagement.model.DataAnnotation;
 import com.sha.serverproductmanagement.model.DataImage;
 import com.sha.serverproductmanagement.model.Dataset;
 
@@ -19,4 +20,10 @@ public interface DatasetService {
     DataImage saveDatasetImage(DataImage image);
 
     Object findAllDatasetImages(Long datasetId);
+
+    DataAnnotation findImageAnnotation(Long imageId);
+
+    DataAnnotation saveAnnotation(DataAnnotation annotation);
+
+    void deleteAnnotations(Long image_id);
 }
